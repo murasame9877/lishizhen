@@ -496,42 +496,48 @@ xml_slides.remove(sld_ids[-1])
 xml_slides.insert(9, sld_ids[-1])
 
 
-# ---------- 联想命题关联页 ----------
+# ---------- 与联想命题的关联：重构 AI 时代的工作方式 ----------
 layout = next(l for l in prs.slide_layouts if l.name == "3_Title and two columns")
 s = prs.slides.add_slide(layout)
 for sh in list(s.shapes):
     if sh.is_placeholder:
         sh._element.getparent().remove(sh._element)
-add_text(s, 0.25, 0.82, 8.8, 0.4, ["与联想命题的关联：可验证的闭环"], size=20, bold=True, color=DEEP)
-add_text(s, 0.25, 1.18, 8.8, 0.25, ["选定角色 + 一项任务；当前规则+OCR，企业版可私有化，远期端侧。"], size=8.8, color=GRAY)
+add_text(s, 0.25, 0.8, 9.4, 0.42, ["重构 AI 时代的工作方式：从天禧「问答」到「办事」"], size=19, bold=True, color=DEEP)
+add_text(s, 0.25, 1.2, 9.4, 0.24, ["命题一 · AI 办公任务助手｜选定角色：售后服务工程师 / 客户成功专员"], size=9, color=GRAY)
 
-card(s, 0.35, 1.52, 3.35, 1.02, PALE)
-add_text(s, 0.5, 1.62, 3.0, 0.22, ["选定角色"], size=9, bold=True, color=GREEN)
-add_text(s, 0.5, 1.87, 3.1, 0.55, ["售后服务工程师 / 客户成功专员"], size=11.5, bold=True, color=DEEP)
+# 顶部一句立意
+band = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.35), Inches(1.55), Inches(9.3), Inches(0.82))
+band.fill.solid(); band.fill.fore_color.rgb = DEEP; band.line.fill.background()
+tf = band.text_frame; tf.word_wrap = True; tf.margin_left = Inches(0.2); tf.margin_right = Inches(0.2); tf.margin_top = Inches(0.1)
+lines = [("今天的 AI 是你问它答；理时针让它「替你在对的时刻推动下一步」。", 11.5, True),
+         ("人不再靠记、靠抄、靠切换 App——信息一出现，就自动落到该落的地方。", 9, False)]
+for i,(t,sz,b) in enumerate(lines):
+    para = tf.paragraphs[0] if i==0 else tf.add_paragraph()
+    para.alignment = PP_ALIGN.CENTER
+    run = para.add_run(); run.text = t; run.font.name = FONT; run.font.size = Pt(sz); run.font.bold = b; run.font.color.rgb = WHITE
 
-card(s, 0.35, 2.72, 3.35, 1.35, PALE)
-add_text(s, 0.5, 2.82, 3.0, 0.22, ["选定任务"], size=9, bold=True, color=GREEN)
-add_text(s, 0.5, 3.07, 3.1, 0.9, ["从会话、邮件、纪要、截图中提取时间承诺，自动生成跟进日程与提醒。"], size=9.2, color=INK)
-
-card(s, 0.35, 4.25, 3.35, 0.9, DEEP)
-add_text(s, 0.5, 4.35, 3.1, 0.25, ["交付：软件 MVP 已跑通"], size=10, bold=True, color=WHITE)
-add_text(s, 0.5, 4.62, 3.1, 0.25, ["119 条测试 + Android 真机闭环"], size=8, color=RGBColor(0xD8, 0xE8, 0xDF))
-
-data = [
-    ["命题要求", "我们现在", "演进路径"],
-    ["全本地化 / 端侧", "非全本地；数据经微信/服务端", "企业版私有化；远期端侧"],
-    ["无网持续工作", "解析/OCR/日历可本地运行", "私有化后内网可用"],
-    ["会议 → 需求 → 跟进", "会话/文章/海报已跑通；纪要在下一步", "接纪要/邮件入口"],
-    ["本地检索 / 引用可溯源", "每条日程保留来源（已实现）", "企业知识库检索"],
-    ["跨文档 / 跨应用", "微信 / 文章 / 海报", "飞书/邮件/截图/系统识屏"],
+# 三层价值（近期/中期/远期）
+vals = [
+    ("近期 · 场景价值", GREEN, "售后预约 / 回访 / 保修到期自动进日历；降爽约、提 SLA、少手工登记，可量化 ROI。"),
+    ("中期 · 产品价值", RGBColor(0xB8,0x86,0x00), "系统级「截图即日程」，让天禧 AI 从问答走向办事，多一个高频日常入口。"),
+    ("远期 · 生态价值", GRAY, "跨文档 / 跨软件 / 跨生态的统一「信息→日程」，成为联想终端的差异化能力模块。"),
 ]
-add_table(s, 3.95, 1.52, 5.75, 6, 3, [1.65, 2.45, 1.65], data, size=8.2)
-add_text(s, 3.95, 5.0, 5.8, 0.25, ["诚实边界：当前不是大模型、不是全端侧；先交付可验证闭环。"], size=8.5, bold=True, color=GREEN)
+for idx,(title,color,desc) in enumerate(vals):
+    x = 0.35 + idx*3.2
+    card(s, x, 2.62, 2.95, 1.95, PALE if idx!=2 else LIGHT)
+    add_text(s, x+0.2, 2.78, 2.55, 0.4, [title], size=11, bold=True, color=color)
+    add_text(s, x+0.2, 3.22, 2.6, 1.2, [desc], size=8.8, color=INK)
+
+# 底部：任务 + 诚实边界
+add_text(s, 0.35, 4.8, 9.3, 0.28, ["任务：把会话、邮件、纪要、截图里的时间承诺，变成跟进日程与提醒。"], size=9.5, bold=True, color=DEEP)
+add_text(s, 0.35, 5.16, 9.3, 0.26, ["诚实边界：当前规则 + OCR，非大模型、非全端侧；企业版可私有化部署，远期端侧。每条日程保留来源，可溯源。"], size=8.3, color=GRAY)
 s.notes_slide.notes_text_frame.text = (
-    "60 秒：联想命题一要求选定角色 + 一项办公任务。我们选售后服务工程师，"
-    "任务是把会话、邮件、纪要、截图里的时间承诺变成跟进日程。"
-    "当前是规则 + OCR，不是大模型，也不是全端侧；每条日程保留来源可溯源。"
-    "企业版可私有化部署满足本地化要求，远期走向端侧与系统级。"
+    "60 秒：联想命题一要求选定一个角色 + 一项办公任务。我们选售后服务工程师，"
+    "任务是把握会话、邮件、纪要、截图里的时间承诺变成跟进日程。"
+    "但这一页想讲的是更根本的东西：我们不是在某个软件里加个日历按钮，"
+    "而是重构 AI 时代的工作方式——把天禧 AI 从「你问它答」变成「它替你在对的时刻推动下一步」。"
+    "近期是售后场景的可量化 ROI；中期让天禧从问答走向办事；远期成为联想终端的跨生态能力模块。"
+    "诚实地说：当前是规则 + OCR，不是大模型，也不是全端侧；企业版私有化、远期端侧。"
 )
 
 xml_slides = prs.slides._sldIdLst
