@@ -25,6 +25,7 @@ YELLOW = RGBColor(0xF2, 0xB7, 0x05)
 RED = RGBColor(0xB4, 0x45, 0x3A)
 WHITE = RGBColor(0xFF, 0xFF, 0xFF)
 PALE = RGBColor(0xE9, 0xF3, 0xEC)
+LIGHT = RGBColor(0xF7, 0xF9, 0xF8)
 FONT = "微软雅黑"
 
 
@@ -85,16 +86,16 @@ def arrow(slide, x, y, w=0.25, h=0.2, color=GREEN):
 
 
 
-def add_table(slide, x, y, w, rows, cols, widths, data, *, size=8, header_fill=GREEN):
+def add_table(slide, x, y, w, rows, cols, widths, data, *, size=8, header_fill=GREEN, row_h=0.56, header_h=0.42):
     shape = slide.shapes.add_table(
         rows, cols, Inches(x), Inches(y), Inches(w), Inches(0.5 * rows)
     )
     tbl = shape.table
     for i, width in enumerate(widths):
         tbl.columns[i].width = Inches(width)
-    tbl.rows[0].height = Inches(0.42)
+    tbl.rows[0].height = Inches(header_h)
     for r in range(1, rows):
-        tbl.rows[r].height = Inches(0.56)
+        tbl.rows[r].height = Inches(row_h)
     for r in range(rows):
         for c in range(cols):
             cell = tbl.cell(r, c)
@@ -123,8 +124,8 @@ s = prs.slides[0]
 add_text(s, 0.55, 4.55, 4.4, 0.4, ["理时针"], size=22, bold=True, color=DEEP)
 add_text(
     s, 0.55, 4.95, 4.6, 0.3,
-    ["把任何 App 里的活动，一键变成会提醒的日程"],
-    size=10, bold=True, color=GREEN,
+    ["看到即日程：把活动与预约，变成会响的日历提醒"],
+    size=9.5, bold=True, color=GREEN,
 )
 add_text(s, 0.55, 5.28, 4.6, 0.25, ["团队：成员 A / B / C    2026.11"], size=9, color=GRAY)
 
@@ -134,7 +135,7 @@ set_text(find(s, "文本框 2"), ["一句话项目小结"], size=20, bold=True, 
 one = find(s, "Text Placeholder 1")
 one.top = Inches(2.4)
 one.height = Inches(1.0)
-set_text(one, ["把信息入口和提醒系统连起来。"], size=26, bold=True, color=INK)
+set_text(one, ["看到即日程。"], size=28, bold=True, color=INK)
 
 # ---------- S3 团队（占位，用户自行替换）----------
 s = prs.slides[2]
@@ -171,7 +172,7 @@ for cx, letter in [(0.56, "A"), (2.49, "B"), (4.38, "C")]:
 
 # ---------- S4 问题与创新 ----------
 s = prs.slides[3]
-set_text(find(s, "文本框 1"), ["问题与创新  Problem & Innovation"], size=20, bold=True, color=DEEP)
+set_text(find(s, "文本框 1"), ["痛点：错过的成本"], size=20, bold=True, color=DEEP)
 for sh in list(s.shapes):
     if sh.left is not None and sh.left >= Inches(5.7):
         sh._element.getparent().remove(sh._element)
@@ -182,16 +183,17 @@ if poster.exists():
 set_text(
     find(s, "文本框 2"),
     [
-        "信息散落在公众号、群聊、飞书、小红书、邮件与海报里；",
-        "看到不等于记住，报名截止与开始时间靠人脑记。",
-        "手动建日程又慢又易错；企业侧的预约与回访同样如此。",
+        "信息散落在公众号、群聊、海报、邮件里，人靠脑子记、靠手抄日历，必然漏。",
+        "个人：高频学生每月错过 1–2 次；机会成本难计价，但可测提醒覆盖率。",
+        "企业：一次爽约 = 一次二次上门；行业锚点 100–130 元/单，二次售后率 6.7%。",
+        "月损失 = N × r × C；例：1000 单 × 10% × 120 元 ≈ 1.2 万元/月。",
         "",
-        "创新：把「信息入口」与「提醒系统」自动化连接——",
-        "多源捕获 → 中文时间/地点抽取（规则 + OCR）→ 写入系统日历。",
+        "创新：捕获 → 规则 + OCR 理解 → 写入系统日历，由系统负责到点提醒。",
     ],
-    size=10.5,
+    size=9.6,
     color=INK,
 )
+add_text(s, 0.25, 4.72, 5.4, 0.3, ["来源：鲁班到家/中国家电网 2024；爽约率为假设，待试点校准"], size=7.5, color=GRAY)
 
 # ---------- S5 目标客户（先讲获益，不催付费）----------
 s = prs.slides[4]
@@ -206,7 +208,7 @@ set_text(
         "校园是首批场景：活动密度高、传播快，",
         "但同样的能力可平移到企业与社群。",
         "",
-        "活动方与广告主：为精准触达付费。",
+        "活动主办方：为报名 → 到场转化付费。",
     ],
     size=11,
     color=INK,
@@ -225,72 +227,50 @@ add_text(
     size=10.2,
     color=INK,
 )
-add_text(s, 0.45, 5.05, 9.2, 0.3, ["C 端免费 · 企业为结果付费 · 活动方/广告主为触达付费"], size=9.5, bold=True, color=GREEN)
+add_text(s, 0.45, 5.05, 9.2, 0.3, ["C 端免费 · 企业为结果付费 · 活动方为到场转化付费"], size=9.5, bold=True, color=GREEN)
 
-# ---------- S6 市场规模（数字 + 增长曲线）----------
+# ---------- S6 市场规模 ----------
 s = prs.slides[5]
-set_text(find(s, "文本框 1"), ["市场规模"], size=20, bold=True, color=DEEP)
-set_text(find(s, "Shape 81"), [""], size=11, color=GRAY)
-remove(s, {"Shape 103", "Shape 104", "Shape 106", "Shape 107", "Shape 110", "Shape 111", "Shape 119", "Shape 102", "Shape 105", "Shape 108", "Shape 116"})
+_t = find(s, "文本框 1")
+_t.width = Inches(8.6)
+set_text(_t, ["市场：消费端种子，企业端付费"], size=20, bold=True, color=DEEP)
+remove(s, {"Shape 81", "Shape 103", "Shape 104", "Shape 106", "Shape 107", "Shape 110", "Shape 111", "Shape 119", "Shape 102", "Shape 105", "Shape 108", "Shape 116"})
 
-stats = [
-    ("TAM 总体市场", "4,700 万+", "在校生 + 企业服务与泛职场人群", 1.62),
-    ("SAM 可服务市场", "50 万+", "10 所高校 + 联想服务坐席（假设）", 2.72),
-    ("SOM 首年目标", "2 万+", "1 所高校 30% MAU + 300 企业坐席", 3.82),
-]
-for label, number, desc, y in stats:
-    add_text(s, 0.45, y, 2.2, 0.25, [label], size=10, bold=True, color=GREEN)
-    add_text(s, 0.45, y + 0.28, 2.2, 0.4, [number], size=20, bold=True, color=DEEP)
-    add_text(s, 2.55, y + 0.28, 2.7, 0.5, [desc], size=8.5, color=GRAY)
+card(s, 0.35, 1.45, 4.45, 3.15, PALE)
+add_text(s, 0.55, 1.62, 4.0, 0.3, ["消费端（获客层，不直接变现）"], size=11, bold=True, color=GREEN)
+add_text(s, 0.55, 2.0, 4.0, 2.4, [
+    "TAM：4,763 万在校生（教育部 2023）",
+    "SAM：其中 1%–5% 愿意做一次性日历配置（待验证）",
+    "SOM：1 所高校 + 若干社群，数千 MAU",
+    "目标：验证留存，不追求数字好看",
+], size=9.5, color=INK)
 
-chart_data = CategoryChartData()
-chart_data.categories = ["2026 首年", "2027", "2028"]
-chart_data.add_series("覆盖用户（万）", (2, 50, 200))
-gf = s.shapes.add_chart(
-    XL_CHART_TYPE.LINE_MARKERS, Inches(5.35), Inches(1.55), Inches(4.3), Inches(3.2), chart_data
-)
-chart = gf.chart
-chart.has_legend = False
-chart.has_title = True
-chart.chart_title.text_frame.text = "覆盖用户增长（假设）"
-plot = chart.plots[0]
-plot.has_data_labels = True
-plot.data_labels.position = XL_LABEL_POSITION.ABOVE
-plot.data_labels.font.size = Pt(9)
-series = plot.series[0]
-series.format.line.color.rgb = GREEN
-series.format.line.width = Pt(2.5)
-chart.font.name = FONT
-chart.font.size = Pt(9)
-chart.font.color.rgb = GRAY
-chart.value_axis.has_major_gridlines = False
-chart.value_axis.tick_labels.font.size = Pt(9)
-chart.category_axis.tick_labels.font.size = Pt(8.5)
-chart.value_axis.format.line.color.rgb = RGBColor(0xC9, 0xD6, 0xCF)
-chart.category_axis.format.line.color.rgb = RGBColor(0xC9, 0xD6, 0xCF)
-chart.value_axis.tick_labels.font.color.rgb = GRAY
-chart.category_axis.tick_labels.font.color.rgb = GRAY
-chart.chart_title.text_frame.paragraphs[0].font.size = Pt(11)
-add_text(s, 0.45, 4.75, 4.5, 0.3, ["路径：校园 → 企业服务 → 泛人群"], size=9, color=GREEN, bold=True)
-add_text(s, 5.35, 4.85, 4.3, 0.3, ["数据：教育部 2023；规模为假设，待试点校准"], size=8.5, color=GRAY)
+card(s, 5.0, 1.45, 4.6, 3.15, LIGHT)
+add_text(s, 5.2, 1.62, 4.2, 0.3, ["企业端（付费层，可量化 ROI）"], size=11, bold=True, color=GREEN)
+add_text(s, 5.2, 2.0, 4.2, 2.4, [
+    "上门/售后服务市场大，但坐席与爽约率无权威统计",
+    "联想售后是现成标杆：预约、回访、保修到期",
+    "用 N×r×C 验证：爽约率每降 1 个点都能算清",
+    "目标：验证付费意愿与续约",
+], size=9.5, color=INK)
+add_text(s, 0.45, 4.85, 9.2, 0.3, ["不做「4,700 万 → 增长曲线」的拍脑袋叙事；消费端验证留存，企业端验证付费。"], size=9.2, bold=True, color=GREEN)
 
-# ---------- S7 价值主张（三列卡片）----------
+# ---------- S7 价值主张 ----------
 s = prs.slides[6]
 add_text(s, 0.25, 1.04, 3.0, 0.4, ["价值主张"], size=20, bold=True, color=DEEP)
 remove(s, {"矩形 3", "Shape 95"})
 values = [
-    ("个人", "不遗漏", "转发/截图即入日历\n到点提醒，不再靠记忆"),
-    ("企业", "可量化", "少一次爽约，少一次上门\nSLA 与人效可被衡量"),
-    ("生态", "更精准", "活动与服务的触达\n发生在用户需要的那一刻"),
+    ("个人", "不遗漏", "看到即日程，不再靠记忆"),
+    ("企业", "可量化", "爽约率下降，SLA 可衡量"),
+    ("活动方", "到场转化", "报名 → 到场，主办方愿付费"),
 ]
 for idx, (who, tag, desc) in enumerate(values):
     x = 0.4 + idx * 3.2
-    card(s, x, 1.7, 3.0, 2.55, PALE)
+    card(s, x, 1.7, 3.0, 2.45, PALE)
     add_text(s, x + 0.22, 1.9, 2.6, 0.3, [who], size=10, color=GRAY)
-    add_text(s, x + 0.22, 2.28, 2.6, 0.5, [tag], size=24, bold=True, color=GREEN if idx < 2 else RGBColor(0xB8, 0x86, 0x00))
-    add_text(s, x + 0.22, 3.0, 2.65, 1.2, desc.split("\n"), size=9.5, color=INK)
-
-add_text(s, 0.4, 4.55, 9.3, 0.35, ["价值公式：正确的时间 + 正确的地点 + 一次不会错过的提醒"], size=10.5, bold=True, color=GREEN)
+    add_text(s, x + 0.22, 2.25, 2.6, 0.5, [tag], size=24, bold=True, color=GREEN if idx < 2 else RGBColor(0xB8, 0x86, 0x00))
+    add_text(s, x + 0.22, 2.95, 2.65, 1.0, [desc], size=10, color=INK)
+add_text(s, 0.4, 4.5, 9.3, 0.5, ["提醒交给系统日历：微信 48 小时窗口、订阅消息逐次授权，都撑不起准时提醒。"], size=9.5, bold=True, color=GREEN)
 
 # ---------- S8 资源与伙伴 ----------
 s = prs.slides[7]
@@ -299,8 +279,8 @@ set_text(
     find(s, "Text Placeholder 1"),
     [
         "微信生态：客服、公众号文章与分享入口。",
-        "企业场景：售后预约、回访与保修到期（如联想）。",
-        "校园与社团：首批验证场景与种子用户。",
+        "企业场景：售后预约、回访、保修到期（联想为标杆）。",
+        "活动主办方：社团、院系、活动公司，提供场景与付费。",
         "开源组件：Radicale、DAVx5、RapidOCR、FastAPI。",
     ],
     size=11,
@@ -309,22 +289,29 @@ set_text(
 
 # ---------- S9 技术与 MVP ----------
 s = prs.slides[8]
-set_text(find(s, "文本框 1"), ["技术实现与 MVP"], size=20, bold=True, color=DEEP)
-set_text(
-    find(s, "Text Placeholder 1"),
-    [
-        "多源入口 → 中文时间规则 + RapidOCR → FastAPI/SQLite",
-        "→ CalDAV/Radicale → DAVx5 → Android 系统日历 → 通知。",
-        "",
-        "已跑通：文字/文章/海报；119 条测试；OCR 3–10 秒；",
-        "真机写入系统日历，2 分钟内事件准时弹窗。",
-    ],
-    size=10.5,
-    color=INK,
-)
-montage = SHOTS / "montage.png"
-if montage.exists():
-    s.shapes.add_picture(str(montage), Inches(6.4), Inches(1.55), width=Inches(3.3))
+_t = find(s, "文本框 1")
+_t.width = Inches(8.0)
+set_text(_t, ["技术实现与 MVP（诚实边界）"], size=20, bold=True, color=DEEP)
+remove(s, {"Text Placeholder 1"})
+card(s, 0.35, 1.45, 4.45, 3.0, PALE)
+add_text(s, 0.55, 1.62, 4.0, 0.3, ["已实现（可演示）"], size=11, bold=True, color=GREEN)
+add_text(s, 0.55, 2.0, 4.0, 2.2, [
+    "文字 / 文章链接 / 海报 OCR 三入口",
+    "中文相对时间、区间、截止归一化",
+    "冲突检测、编号管理、改 / 删",
+    "CalDAV → 系统日历 → 到点提醒",
+    "119 条测试 + 真机闭环",
+], size=9.5, color=INK)
+card(s, 5.05, 1.45, 4.55, 3.0, LIGHT)
+add_text(s, 5.25, 1.62, 4.1, 0.3, ["待实现（规划）"], size=11, bold=True, color=GRAY)
+add_text(s, 5.25, 2.0, 4.1, 2.2, [
+    "官方微信客服 API（替代网页桥接）",
+    "自研 App，去掉 DAVx5 配置",
+    "多用户隔离、正式 CalDAV 账户",
+    "企业私有化 / 远期端侧",
+    "跨 App 捕获（分享面板 / 识屏）",
+], size=9.5, color=INK)
+add_text(s, 0.35, 4.65, 9.3, 0.5, ["规则 + OCR，不是大模型；当前数据经微信与服务端，企业版可私有化部署。不夸大「数据不出端」。"], size=8.8, color=GRAY)
 
 # ---------- 新增：实测画面页（插在第 9 页之后）----------
 layout = next(l for l in prs.slide_layouts if l.name == "3_Title and two columns")
@@ -346,44 +333,44 @@ for idx, (name, caption) in enumerate(shots):
     photo.shapes.add_picture(str(path), Inches(x), Inches(1.35), height=Inches(3.9))
     add_text(photo, x, 5.35, 2.7, 0.3, [caption], size=10, color=GRAY)
 add_text(photo, 0.25, 1.05, 4.0, 0.2, [""], size=7.5, color=GRAY)
-# ---------- S10 商业模式（价值交换，不催联想买单）----------
+# ---------- S10 商业模式（价值定价）----------
 s = prs.slides[9]
-set_text(find(s, "文本框 1"), ["商业模式"], size=20, bold=True, color=DEEP)
+set_text(find(s, "文本框 1"), ["商业模式：价值定价"], size=20, bold=True, color=DEEP)
 set_text(
     find(s, "Shape 147"),
     [
-        "C 端免费；",
+        "C 端永久免费；",
         "B 端为结果付费。",
         "",
-        "企业服务：交付少爽约/高 SLA",
-        "终端合作：交付系统级入口",
-        "消费 App：交付精准触达",
+        "企业线：基础费 + 效果费",
+        "活动线：场次 + 到场分成",
+        "远期：能力授权 / 联合运营",
     ],
-    size=10.5,
+    size=10,
     color=INK,
 )
 for sh in list(s.shapes):
     if sh.shape_type == 13:
         sh._element.getparent().remove(sh._element)
 revenues = [
-    ("企业服务", "服务型企业", "按坐席 / 项目"),
-    ("终端合作", "设备厂商", "授权 / 联合运营"),
-    ("消费 App", "广告主·活动方", "广告 / 推广 / 票务"),
+    ("企业线", "服务型企业", "基础费 50–100 元/坐席/月；效果费 25–40 元/次"),
+    ("活动线", "活动主办方", "按场次收费；按到场转化分成"),
+    ("远期", "联想等终端厂商", "能力授权；联合运营分成"),
 ]
 for idx, (name, payer, desc) in enumerate(revenues):
     x = 3.45 + idx * 2.15
     box = s.shapes.add_shape(
-        MSO_SHAPE.ROUNDED_RECTANGLE, Inches(x), Inches(1.85), Inches(1.95), Inches(2.35)
+        MSO_SHAPE.ROUNDED_RECTANGLE, Inches(x), Inches(1.8), Inches(1.95), Inches(2.25)
     )
     box.fill.solid()
     box.fill.fore_color.rgb = RGBColor(0xF2, 0xF7, 0xF3)
     box.line.fill.background()
     tf = box.text_frame
     tf.word_wrap = True
-    tf.margin_left = Inches(0.1)
-    tf.margin_right = Inches(0.1)
+    tf.margin_left = Inches(0.08)
+    tf.margin_right = Inches(0.08)
     for i, (text, size, bold, color) in enumerate(
-        [(name, 12, True, DEEP), (payer, 9, True, GREEN), ("", 5, False, INK), (desc, 9, False, INK)]
+        [(name, 12, True, DEEP), (payer, 9, True, GREEN), ("", 4, False, INK), (desc, 8.0, False, INK)]
     ):
         para = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
         para.alignment = PP_ALIGN.CENTER
@@ -393,19 +380,20 @@ for idx, (name, payer, desc) in enumerate(revenues):
         run.font.size = Pt(size)
         run.font.bold = bold
         run.font.color.rgb = color
+add_text(s, 3.45, 4.15, 6.25, 0.3, ["示例：若帮客户省 173 万，收 30–50 万合理，而非 18 万。"], size=8.5, color=GRAY)
 bar = s.shapes.add_shape(
-    MSO_SHAPE.ROUNDED_RECTANGLE, Inches(3.45), Inches(4.35), Inches(6.25), Inches(0.55)
+    MSO_SHAPE.ROUNDED_RECTANGLE, Inches(3.45), Inches(4.55), Inches(6.25), Inches(0.55)
 )
 bar.fill.solid()
 bar.fill.fore_color.rgb = DEEP
 bar.line.fill.background()
 tf = bar.text_frame
-tf.text = "客户获得：更少爽约 · 更高 SLA · 更精准触达｜C 端始终免费"
-for p in tf.paragraphs:
-    p.alignment = PP_ALIGN.CENTER
-    for r in p.runs:
+tf.text = "C 端永久免费｜不做 ToC 广告｜效果费与创造的价值线性挂钩"
+for p_ in tf.paragraphs:
+    p_.alignment = PP_ALIGN.CENTER
+    for r in p_.runs:
         r.font.name = FONT
-        r.font.size = Pt(9.5)
+        r.font.size = Pt(8.8)
         r.font.bold = True
         r.font.color.rgb = WHITE
 
@@ -450,16 +438,16 @@ for idx, (num, name, desc) in enumerate(nodes):
 
 add_text(s, 5.9, 1.08, 3.6, 0.3, ["MVP：已闭环"], size=11, bold=True, color=GREEN, align=PP_ALIGN.RIGHT)
 milestones = [
-    ("已完成", "文字/文章/海报\n119 条测试\n真机通知", GREEN),
-    ("下一步", "企业 300 坐席\n高校 2 万学生\n2 家活动方", DEEP),
-    ("未来", "独立 App\n联想系统 AI\n跨 App 捕获", GRAY),
+    ("已完成", "三入口 + 真机闭环|119 条测试|到点通知", GREEN),
+    ("0–3 个月", "联想 1 个事业部|1 所高校种子|2 家活动方", DEEP),
+    ("3–24 个月", "官方客服 API|自研 App 去 DAVx5|企业复制扩张", GRAY),
 ]
 for idx, (title, desc, color) in enumerate(milestones):
     x = 0.45 + idx * 3.05
     card(s, x, 3.15, 2.85, 1.55, PALE if idx == 0 else RGBColor(0xF7, 0xF9, 0xF8))
     add_text(s, x + 0.18, 3.28, 2.5, 0.3, [title], size=11, bold=True, color=color)
-    add_text(s, x + 0.18, 3.65, 2.55, 0.95, desc.split("\n"), size=8.5, color=INK)
-add_text(s, 0.45, 4.95, 9.2, 0.3, ["下一步验证：付费意愿、爽约率下降、广告 eCPM"], size=9, color=GRAY)
+    add_text(s, x + 0.18, 3.65, 2.55, 0.95, desc.split("|"), size=9.3, color=INK)
+add_text(s, 0.45, 4.95, 9.2, 0.3, ["测量：写入成功率 ≥95% · 爽约率降 ≥5% · 留存/续约"], size=9, color=GRAY)
 
 # ---------- S12 SDG 指标 ----------
 s = prs.slides[11]
@@ -469,7 +457,7 @@ sdg_items = [
     ("减少错过", "每用户每月减少 1–2 次错过活动/预约"),
     ("写入与触达", "日程写入成功率 ≥ 95%，提醒到达率 ≥ 90%"),
     ("企业效率", "试点企业爽约率下降 ≥ 5%"),
-    ("覆盖规模", "首年 2 万+ 用户、300+ 企业坐席"),
+    ("覆盖规模", "首年种子：数千 MAU + 1 个事业部试点"),
 ]
 for idx, (title, desc) in enumerate(sdg_items):
     x = 0.45 + (idx % 2) * 4.5
@@ -484,17 +472,17 @@ s = prs.slides[12]
 set_text(find(s, "文本框 1"), ["风险与应对"], size=20, bold=True, color=DEEP)
 remove(s, {"文本占位符 2"})
 risks = [
-    ("平台依赖", "入口或桥接失效", "官方 API / 系统级集成 / 多入口", 0.45, 1.55),
-    ("隐私与安全", "用户不信任", "最小化存储 / 图片 7 天清理", 4.95, 1.55),
-    ("商业化验证", "付费意愿不确定", "先用试点与 ROI 说话", 0.45, 3.35),
-    ("大厂竞争", "系统自带日程/助手", "做深中文抽取与跨 App 捕获", 4.95, 3.35),
+    ("平台依赖", "桥接或入口失效", "官方 API / 自研 App / 多入口", 0.45, 1.55),
+    ("配置门槛", "DAVx5 劝退用户", "iOS 原生 CalDAV；App 用 CalendarContract", 4.95, 1.55),
+    ("大厂竞争", "系统 AI / 微信自己做", "做深垂直闭环，先落企业付费", 0.45, 3.35),
+    ("付费意愿", "效果费模式未验证", "试点 + 真实 ROI，效果付费降低门槛", 4.95, 3.35),
 ]
 for title, risk, action, x, y in risks:
     card(s, x, y, 4.3, 1.55, RGBColor(0xF7, 0xF9, 0xF8))
     add_text(s, x + 0.2, y + 0.12, 3.9, 0.3, [title], size=11, bold=True, color=DEEP)
     add_text(s, x + 0.2, y + 0.48, 3.9, 0.3, ["风险：" + risk], size=9.3, color=RED)
     add_text(s, x + 0.2, y + 0.85, 3.9, 0.5, ["应对：" + action], size=9.3, color=GREEN)
-add_text(s, 0.45, 5.1, 9.0, 0.3, ["原则：入口可以变，能力不变；先用可验证的场景活下来。"], size=9.5, color=GRAY)
+add_text(s, 0.45, 5.1, 9.0, 0.3, ["本地化口径：不声称数据不出端；B 端私有化、远期端侧，能力按场景演进。"], size=9, color=GRAY)
 
 # ---------- S14 结语 ----------
 s = prs.slides[13]
@@ -508,42 +496,42 @@ xml_slides.remove(sld_ids[-1])
 xml_slides.insert(9, sld_ids[-1])
 
 
-# ---------- 新增：联想命题关联页（放在一句话小结之后）----------
+# ---------- 联想命题关联页 ----------
 layout = next(l for l in prs.slide_layouts if l.name == "3_Title and two columns")
 s = prs.slides.add_slide(layout)
 for sh in list(s.shapes):
     if sh.is_placeholder:
         sh._element.getparent().remove(sh._element)
-add_text(s, 0.25, 0.82, 8.8, 0.4, ["联想命题一 · AI 办公任务助手"], size=20, bold=True, color=DEEP)
-add_text(s, 0.25, 1.18, 8.8, 0.25, ["选定一个职业角色 + 一项办公任务；本地化部署，数据不出端。"], size=9.2, color=GRAY)
+add_text(s, 0.25, 0.82, 8.8, 0.4, ["与联想命题的关联：可验证的闭环"], size=20, bold=True, color=DEEP)
+add_text(s, 0.25, 1.18, 8.8, 0.25, ["选定角色 + 一项任务；当前规则+OCR，企业版可私有化，远期端侧。"], size=8.8, color=GRAY)
 
 card(s, 0.35, 1.52, 3.35, 1.02, PALE)
 add_text(s, 0.5, 1.62, 3.0, 0.22, ["选定角色"], size=9, bold=True, color=GREEN)
-add_text(s, 0.5, 1.87, 3.1, 0.55, ["售后服务工程师 / 客户成功专员"], size=12, bold=True, color=DEEP)
+add_text(s, 0.5, 1.87, 3.1, 0.55, ["售后服务工程师 / 客户成功专员"], size=11.5, bold=True, color=DEEP)
 
 card(s, 0.35, 2.72, 3.35, 1.35, PALE)
 add_text(s, 0.5, 2.82, 3.0, 0.22, ["选定任务"], size=9, bold=True, color=GREEN)
-add_text(s, 0.5, 3.07, 3.1, 0.9, ["从会话、邮件、纪要、截图中提取时间承诺，自动生成跟进日程与提醒。"], size=9.4, color=INK)
+add_text(s, 0.5, 3.07, 3.1, 0.9, ["从会话、邮件、纪要、截图中提取时间承诺，自动生成跟进日程与提醒。"], size=9.2, color=INK)
 
 card(s, 0.35, 4.25, 3.35, 0.9, DEEP)
 add_text(s, 0.5, 4.35, 3.1, 0.25, ["交付：软件 MVP 已跑通"], size=10, bold=True, color=WHITE)
 add_text(s, 0.5, 4.62, 3.1, 0.25, ["119 条测试 + Android 真机闭环"], size=8, color=RGBColor(0xD8, 0xE8, 0xDF))
 
 data = [
-    ["命题要求", "理时针的实现"],
-    ["全本地化 / 端侧", "本地 FastAPI/SQLite/RapidOCR/CalDAV，无云端 LLM"],
-    ["无网持续工作", "解析/OCR/日历写入全本地，可断网"],
-    ["会议 → 需求 → 自动跟进", "纪要/会话抽取待办 + 截止 → 日历提醒"],
-    ["本地检索 / 引用可溯源", "每条日程保留来源（会话/URL/图片）"],
-    ["跨文档 / 跨应用", "微信/飞书/小红书/邮件/截图统一入口"],
+    ["命题要求", "我们现在", "演进路径"],
+    ["全本地化 / 端侧", "非全本地；数据经微信/服务端", "企业版私有化；远期端侧"],
+    ["无网持续工作", "解析/OCR/日历可本地运行", "私有化后内网可用"],
+    ["会议 → 需求 → 跟进", "会话/文章/海报已跑通；纪要在下一步", "接纪要/邮件入口"],
+    ["本地检索 / 引用可溯源", "每条日程保留来源（已实现）", "企业知识库检索"],
+    ["跨文档 / 跨应用", "微信 / 文章 / 海报", "飞书/邮件/截图/系统识屏"],
 ]
-add_table(s, 3.95, 1.52, 5.75, 6, 2, [2.0, 3.75], data, size=9.2)
-add_text(s, 3.95, 5.0, 5.8, 0.25, ["一句话：把「时间承诺」从聊天里抽出来，变成可追踪的日程。"], size=9, bold=True, color=GREEN)
+add_table(s, 3.95, 1.52, 5.75, 6, 3, [1.65, 2.45, 1.65], data, size=8.2)
+add_text(s, 3.95, 5.0, 5.8, 0.25, ["诚实边界：当前不是大模型、不是全端侧；先交付可验证闭环。"], size=8.5, bold=True, color=GREEN)
 s.notes_slide.notes_text_frame.text = (
-    "60 秒：联想命题一要求选定角色 + 一项办公任务，做本地化 AI 助手。"
-    "我们选售后服务工程师/客户成功，任务是把会话、邮件、纪要、截图里的时间承诺，"
-    "变成可追踪的日程与提醒。全本地部署，无云端 LLM；每条日程保留来源，可溯源；"
-    "同一套能力跨微信、飞书、小红书、邮件。软件 MVP 已跑通并完成真机验证。"
+    "60 秒：联想命题一要求选定角色 + 一项办公任务。我们选售后服务工程师，"
+    "任务是把会话、邮件、纪要、截图里的时间承诺变成跟进日程。"
+    "当前是规则 + OCR，不是大模型，也不是全端侧；每条日程保留来源可溯源。"
+    "企业版可私有化部署满足本地化要求，远期走向端侧与系统级。"
 )
 
 xml_slides = prs.slides._sldIdLst
@@ -551,30 +539,30 @@ ids = list(xml_slides)
 xml_slides.remove(ids[-1])
 xml_slides.insert(2, ids[-1])
 
-# ---------- 新增：竞品对比页（放在问题与创新之后）----------
+# ---------- 竞品与真实威胁 ----------
 layout = next(l for l in prs.slide_layouts if l.name == "3_Title and two columns")
 s = prs.slides.add_slide(layout)
 for sh in list(s.shapes):
     if sh.is_placeholder:
         sh._element.getparent().remove(sh._element)
-add_text(s, 0.25, 0.8, 9.4, 0.4, ["竞品对比：原生日历 / 飞书 / Teams 之外"], size=20, bold=True, color=DEEP)
+add_text(s, 0.25, 0.8, 9.4, 0.4, ["竞品与真实威胁"], size=20, bold=True, color=DEEP)
 
 data = [
-    ["方案", "一键添加", "依赖的生态", "痛点 / 差异"],
-    ["原生日历（手机/电脑）", "否，只能手动", "无", "信息与日程两张皮"],
-    ["飞书日历", "仅飞书内消息", "飞书", "离开飞书就要手动"],
-    ["Teams / Outlook", "仅 Microsoft 365", "微软", "离开微软就要手动"],
-    ["理时针（现在）", "微信转发/截图", "微信入口", "已解决微信来源"],
-    ["理时针（未来）", "任意 App 截图/识屏", "无（系统级）", "跨文档/软件/生态"],
+    ["类型", "代表", "一键添加", "我们的差异"],
+    ["原生日历", "手机 / 电脑", "否，只能手动", "不会从中文内容抽取"],
+    ["生态日历", "飞书 / Teams", "仅自家生态", "跨生态就失效"],
+    ["活动工具", "活动行 / 超级课程表", "报名 / 课程", "不做通用信息→日历"],
+    ["系统 AI", "小爱 / 小艺 / 天禧", "通用识屏，可能降维", "我们做垂直 + 企业落地"],
+    ["微信自己", "微信", "若原生做，直接覆盖", "先跑企业付费，不押单一入口"],
+    ["理时针", "我们", "微信→日历已跑通", "企业 ROI + 来源可溯源"],
 ]
-add_table(s, 0.35, 1.35, 9.3, 6, 4, [2.2, 2.3, 1.9, 2.9], data, size=9.2)
-add_text(s, 0.35, 4.85, 9.3, 0.25, ["对联想：把「日程」变成系统 AI 的高频办事入口"], size=10, bold=True, color=DEEP)
-add_text(s, 0.35, 5.13, 9.3, 0.25, ["天禧等系统 AI 从问答到办事 · 跨文档/软件/生态 · 售后预约/SLA 可量化"], size=9, color=GRAY)
+add_table(s, 0.35, 1.28, 9.3, 7, 4, [1.55, 2.1, 2.0, 2.75], data, size=8.3, row_h=0.45, header_h=0.36)
+add_text(s, 0.35, 5.02, 9.3, 0.25, ["护城河很薄：靠企业场景先发 + 数据闭环逐步建立，不靠概念。"], size=8.5, bold=True, color=DEEP)
+add_text(s, 0.35, 5.3, 9.3, 0.25, ["对联想：企业售后是可量化 ROI 的现成场景；系统级入口是中期产品价值。"], size=7.8, color=GRAY)
 s.notes_slide.notes_text_frame.text = (
-    "45 秒：原生日历只能手动；飞书和 Teams 的一键添加只在自己的生态里，"
-    "你不在那个办公套件里，信息还是要手动搬。我们现在先把微信这个最大信息源接进来，"
-    "转发/截图即可；未来内置到联想天禧这类系统 AI，就能跨文档、跨软件、跨生态。"
-    "对联想的价值：AI 助手从问答走向办事，增加高频使用场景；企业服务侧的预约与 SLA 也能直接量化。"
+    "45 秒：原生日历只能手动；飞书和 Teams 只在自己生态里；活动工具只覆盖报名。"
+    "真正的威胁是手机厂商系统 AI 和微信自己。我们的打法是先做深垂直闭环，"
+    "先落企业付费场景，用 ROI 和数据闭环逐步建立壁垒，而不是现在就说护城河很深。"
 )
 
 xml_slides = prs.slides._sldIdLst
