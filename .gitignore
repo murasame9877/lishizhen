@@ -1,0 +1,22 @@
+.claude/plans/myagents/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.venv-bot/
+.pytest_cache/
+.mypy_cache/
+
+# 本地配置与数据
+.env
+data/
+tools/
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+*.log
+myagents_files/
+
+# 个人 Claude 配置与技能
+.claude/

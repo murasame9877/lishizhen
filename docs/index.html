@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>理时针 · 把信息入口和提醒系统连起来</title>
+  <meta name="description" content="理时针：把微信、截图、文章里的活动与预约，自动变成手机系统日历里不会错过的提醒。" />
+  <link rel="icon" href="assets/logo.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-orbs" aria-hidden="true">
+    <span class="orb orb-a"></span>
+    <span class="orb orb-b"></span>
+    <span class="orb orb-c"></span>
+  </div>
+
+  <header class="nav" id="nav">
+    <a class="brand" href="#top" aria-label="理时针首页">
+      <img src="assets/logo.png" alt="" />
+      <span>理时针</span>
+    </a>
+    <nav class="nav-links" aria-label="页面导航">
+      <a href="#flow">技术流程</a>
+      <a href="#proof">真机验证</a>
+      <a href="#architecture">技术架构</a>
+      <a href="#future">未来形态</a>
+      <a class="nav-gh" href="https://github.com/" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-copy reveal">
+        <p class="eyebrow"><span class="dot"></span> 微信里的日程 Agent</p>
+        <h1>把信息入口<br />和<strong>提醒系统</strong>连起来。</h1>
+        <p class="lede">
+          任何 App 里的活动与预约，截图、转发或拖拽一下，
+          自动写入手机系统日历，由系统在正确的时间提醒。
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#flow">看它如何工作 <span>↓</span></a>
+          <a class="btn ghost" href="#proof">真机验证</a>
+        </div>
+        <ul class="hero-meta">
+          <li><b>119</b> 条自动化测试</li>
+          <li><b>3–10s</b> 单张海报 OCR</li>
+          <li><b>真机</b> 到点通知已验证</li>
+        </ul>
+      </div>
+      <div class="hero-visual reveal">
+        <div class="phone hero-phone">
+          <div class="phone-notch"></div>
+          <img src="assets/chat.jpg" alt="理时针客服在微信会话中回复已记录卡片" />
+        </div>
+        <div class="float-card float-a">
+          <span class="pulse"></span>
+          <div><b>已同步</b><small>CalDAV → 系统日历</small></div>
+        </div>
+        <div class="float-card float-b">
+          <span class="bell">🔔</span>
+          <div><b>09:53</b><small>提醒测试 · 309会议室</small></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dynamic flow -->
+    <section class="section flow" id="flow">
+      <div class="section-head reveal">
+        <p class="kicker">HOW IT WORKS</p>
+        <h2>从一条消息，到一次提醒</h2>
+        <p class="sub">不是再做一个信息流，而是把「看到」变成「不会错过」。</p>
+      </div>
+
+      <div class="flow-shell reveal">
+        <ol class="steps" id="steps">
+          <li class="step active" data-step="0">
+            <span class="num">01</span>
+            <div><h3>捕获</h3><p>微信 / 飞书 / 小红书 / 邮件，截图、转发或拖拽。</p></div>
+          </li>
+          <li class="step" data-step="1">
+            <span class="num">02</span>
+            <div><h3>理解</h3><p>中文时间规则 + OCR，抽取标题、时间、地点与截止。</p></div>
+          </li>
+          <li class="step" data-step="2">
+            <span class="num">03</span>
+            <div><h3>成卡</h3><p>编号、冲突检测，可改可删，确认后才写日历。</p></div>
+          </li>
+          <li class="step" data-step="3">
+            <span class="num">04</span>
+            <div><h3>同步</h3><p>CalDAV 写入，DAVx5 拉取，不依赖后台常驻。</p></div>
+          </li>
+          <li class="step" data-step="4">
+            <span class="num">05</span>
+            <div><h3>提醒</h3><p>系统日历本地通知，到点弹出。</p></div>
+          </li>
+        </ol>
+
+        <div class="stage">
+          <div class="stage-phone">
+            <div class="scene active" data-scene="0">
+              <img src="assets/chat.jpg" alt="微信会话中的活动海报" />
+              <span class="scene-tag">收到一条海报</span>
+            </div>
+            <div class="scene" data-scene="1">
+              <div class="parse-panel">
+                <p class="parse-title">正在理解这条消息</p>
+                <div class="chip-row"><span class="chip">标题</span><b>新火传书·赠书转赠活动</b></div>
+                <div class="chip-row"><span class="chip">时间</span><b>11-25 周三 09:00–18:00</b></div>
+                <div class="chip-row"><span class="chip">地点</span><b>清华大学人文社科图书馆 G 层</b></div>
+                <div class="scanline"></div>
+              </div>
+            </div>
+            <div class="scene" data-scene="2">
+              <div class="card-panel">
+                <div class="card-head"><span class="check">✓</span> 已记录 #10</div>
+                <dl>
+                  <div><dt>标题</dt><dd>新火传书·旧卷逢新—2026 年赠书转赠活动</dd></div>
+                  <div><dt>时间</dt><dd>11-25 周三 09:00–18:00</dd></div>
+                  <div><dt>地点</dt><dd>清华大学人文社科图书馆 G 层大同厅</dd></div>
+                  <div><dt>状态</dt><dd class="ok">已同步</dd></div>
+                </dl>
+                <p class="card-foot">回复 #10 看详情｜改 10 时间 ...｜删 10</p>
+              </div>
+            </div>
+            <div class="scene" data-scene="3">
+              <div class="sync-panel">
+                <div class="sync-node">理时针</div>
+                <div class="sync-line"><span class="sync-dot"></span></div>
+                <div class="sync-node alt">CalDAV</div>
+                <div class="sync-line"><span class="sync-dot"></span></div>
+                <div class="sync-node">DAVx5</div>
+                <div class="sync-line"><span class="sync-dot"></span></div>
+                <div class="sync-node alt">系统日历</div>
+                <p class="sync-note">写入一次，系统负责之后的每一次提醒。</p>
+              </div>
+            </div>
+            <div class="scene" data-scene="4">
+              <img src="assets/calendar.jpg" alt="手机系统日历中的活动" />
+              <div class="notif-overlay">
+                <span class="notif-icon">25</span>
+                <div><b>提醒测试</b><small>上午 9:53 · 309 会议室</small></div>
+              </div>
+            </div>
+          </div>
+          <p class="stage-caption" id="caption">消息在哪里，日程就从哪里长出来。</p>
+          <div class="stage-progress"><span id="progress"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Proof -->
+    <section class="section proof" id="proof">
+      <div class="section-head reveal">
+        <p class="kicker">REAL DEVICE</p>
+        <h2>真机跑通的，不是概念图</h2>
+        <p class="sub">微信客服 → 解析 → CalDAV → Android 系统日历 → 到点通知。</p>
+      </div>
+      <div class="proof-grid">
+        <figure class="shot reveal">
+          <div class="shot-img"><img src="assets/chat.jpg" alt="客服卡片示意" loading="eager" /></div>
+          <figcaption><b>客服卡片</b><span>界面示意 · 文案来自真实测试</span></figcaption>
+        </figure>
+        <figure class="shot reveal">
+          <div class="shot-img"><img src="assets/calendar.jpg" alt="系统日历真机截图" loading="eager" /></div>
+          <figcaption><b>系统日历</b><span>真机截图 · 11 月 25 日</span></figcaption>
+        </figure>
+        <figure class="shot reveal">
+          <div class="shot-img"><img src="assets/notification.jpg" alt="通知栏真机截图" loading="eager" /></div>
+          <figcaption><b>到点通知</b><span>真机截图 · 09:53 提醒测试</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Architecture -->
+    <section class="section architecture" id="architecture">
+      <div class="section-head reveal">
+        <p class="kicker">UNDER THE HOOD</p>
+        <h2>一套能力，多个入口</h2>
+        <p class="sub">入口可以变，解析与日历写入的能力不变。</p>
+      </div>
+      <div class="arch-grid">
+        <article class="arch-card reveal">
+          <span class="arch-no">01</span>
+          <h3>入口层</h3>
+          <p>微信客服 / 测试号、分享面板、截图、拖拽；未来接入更多 App。</p>
+          <div class="pills"><span>WeCom KF</span><span>Share</span><span>Screenshot</span></div>
+        </article>
+        <article class="arch-card reveal">
+          <span class="arch-no">02</span>
+          <h3>解析层</h3>
+          <p>中文相对时间、区间、截止；RapidOCR 识别海报与截图。</p>
+          <div class="pills"><span>RapidOCR</span><span>Rules</span><span>Confidence</span></div>
+        </article>
+        <article class="arch-card reveal">
+          <span class="arch-no">03</span>
+          <h3>日程服务</h3>
+          <p>编号、冲突检测、改删确认；SQLite 持久化与幂等同步。</p>
+          <div class="pills"><span>FastAPI</span><span>SQLite</span><span>Worker</span></div>
+        </article>
+        <article class="arch-card reveal">
+          <span class="arch-no">04</span>
+          <h3>系统日历</h3>
+          <p>CalDAV/Radicale 写入，DAVx5 拉取，系统负责本地提醒。</p>
+          <div class="pills"><span>CalDAV</span><span>Radicale</span><span>DAVx5</span></div>
+        </article>
+      </div>
+      <div class="arch-note reveal">
+        <span class="note-dot"></span>
+        当前 MVP 已验证：文字、文章链接、海报截图三条入口；119 条测试；2 分钟内事件准时弹窗。
+      </div>
+    </section>
+
+    <!-- Future -->
+    <section class="section future" id="future">
+      <div class="section-head reveal">
+        <p class="kicker">WHAT'S NEXT</p>
+        <h2>从微信 Agent，到系统级能力</h2>
+        <p class="sub">用户不需要改变习惯，入口可以换。</p>
+      </div>
+      <div class="future-grid">
+        <article class="future-card reveal">
+          <span class="phase">现在</span>
+          <h3>微信内 Agent</h3>
+          <p>发消息、转文章、传海报，拿到卡片，写进系统日历。</p>
+          <div class="mini"><img src="assets/logo.png" alt="" /><span>已跑通</span></div>
+        </article>
+        <div class="future-arrow reveal" aria-hidden="true">→</div>
+        <article class="future-card reveal">
+          <span class="phase">近期</span>
+          <h3>独立 App</h3>
+          <p>分享面板、截图、拖拽，跨微信、飞书、小红书与邮件。</p>
+          <div class="mini"><span class="dot-mini"></span><span>跨 App 捕获</span></div>
+        </article>
+        <div class="future-arrow reveal" aria-hidden="true">→</div>
+        <article class="future-card reveal">
+          <span class="phase">未来</span>
+          <h3>系统级 AI</h3>
+          <p>内置手机助手：识屏、截图即触发，自动写入日程与提醒。</p>
+          <div class="mini"><span class="dot-mini"></span><span>预装 / 联合运营</span></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-brand">
+      <img src="assets/logo.png" alt="" />
+      <div><b>理时针</b><span>让每一条被看到的信息，都不会被错过。</span></div>
+    </div>
+    <div class="footer-meta">
+      <span>2026 SDG Open Hack @ Tsinghua</span>
+      <a href="https://github.com/" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
