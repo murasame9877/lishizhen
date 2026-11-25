@@ -333,18 +333,17 @@ for idx, (name, caption) in enumerate(shots):
     photo.shapes.add_picture(str(path), Inches(x), Inches(1.35), height=Inches(3.9))
     add_text(photo, x, 5.35, 2.7, 0.3, [caption], size=10, color=GRAY)
 add_text(photo, 0.25, 1.05, 4.0, 0.2, [""], size=7.5, color=GRAY)
-# ---------- S10 商业模式（价值定价）----------
+# ---------- S10 商业模式（两条路线）----------
 s = prs.slides[9]
-set_text(find(s, "文本框 1"), ["商业模式：价值定价"], size=20, bold=True, color=DEEP)
+set_text(find(s, "文本框 1"), ["商业模式：两条路线"], size=20, bold=True, color=DEEP)
 set_text(
     find(s, "Shape 147"),
     [
         "C 端永久免费；",
-        "B 端为结果付费。",
+        "两条产品路线，各有定位。",
         "",
-        "企业线：基础费 + 效果费",
-        "活动线：场次 + 到场分成",
-        "远期：能力授权 / 联合运营",
+        "路线一：独立 App → 广告收益",
+        "路线二：融合天禧 AI → 产品爆点",
     ],
     size=10,
     color=INK,
@@ -352,48 +351,44 @@ set_text(
 for sh in list(s.shapes):
     if sh.shape_type == 13:
         sh._element.getparent().remove(sh._element)
-revenues = [
-    ("企业线", "服务型企业", "基础费 50–100 元/坐席/月；效果费 25–40 元/次"),
-    ("活动线", "活动主办方", "按场次收费；按到场转化分成"),
-    ("远期", "联想等终端厂商", "能力授权；联合运营分成"),
-]
-for idx, (name, payer, desc) in enumerate(revenues):
-    x = 3.45 + idx * 2.15
-    box = s.shapes.add_shape(
-        MSO_SHAPE.ROUNDED_RECTANGLE, Inches(x), Inches(1.8), Inches(1.95), Inches(2.25)
-    )
-    box.fill.solid()
-    box.fill.fore_color.rgb = RGBColor(0xF2, 0xF7, 0xF3)
-    box.line.fill.background()
-    tf = box.text_frame
-    tf.word_wrap = True
-    tf.margin_left = Inches(0.08)
-    tf.margin_right = Inches(0.08)
-    for i, (text, size, bold, color) in enumerate(
-        [(name, 12, True, DEEP), (payer, 9, True, GREEN), ("", 4, False, INK), (desc, 8.0, False, INK)]
-    ):
-        para = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
-        para.alignment = PP_ALIGN.CENTER
-        run = para.add_run()
-        run.text = text
-        run.font.name = FONT
-        run.font.size = Pt(size)
-        run.font.bold = bold
-        run.font.color.rgb = color
-add_text(s, 3.45, 4.15, 6.25, 0.3, ["示例：若帮客户省 173 万，收 30–50 万合理，而非 18 万。"], size=8.5, color=GRAY)
+
+# 路线一：App + 广告
+c1 = card(s, 0.4, 1.85, 4.35, 2.85, PALE)
+add_text(s, 0.65, 2.0, 3.9, 0.3, ["路线一 · 独立 App"], size=13, bold=True, color=GREEN)
+add_text(s, 0.65, 2.4, 3.9, 0.3, ["免费 + 广告，对标超级课程表"], size=10.5, bold=True, color=DEEP)
+add_text(s, 0.65, 2.82, 3.9, 1.7, [
+    "开屏 / 信息流 / 活动推广",
+    "校园是天然高密度场景",
+    "收入随 MAU 规模增长",
+    "属于中长期可持续收益",
+], size=9.5, color=INK)
+add_text(s, 0.65, 4.42, 3.9, 0.25, ["需要规模，短期不做收入预期"], size=8, color=GRAY)
+
+# 路线二：天禧 AI
+c2 = card(s, 5.0, 1.85, 4.35, 2.85, LIGHT)
+add_text(s, 5.25, 2.0, 3.9, 0.3, ["路线二 · 融合天禧 AI"], size=13, bold=True, color=RGBColor(0xB8,0x86,0x00))
+add_text(s, 5.25, 2.4, 3.9, 0.3, ["产品小流量爆点"], size=10.5, bold=True, color=DEEP)
+add_text(s, 5.25, 2.82, 3.9, 1.7, [
+    "系统级「截图即日程」",
+    "从问答走向办事的高频入口",
+    "做口碑与差异化，把产品做好",
+    "不是持续收益，但奠定产品心智",
+], size=9.5, color=INK)
+add_text(s, 5.25, 4.42, 3.9, 0.25, ["价值在于产品，不在于现金流"], size=8, color=GRAY)
+
 bar = s.shapes.add_shape(
-    MSO_SHAPE.ROUNDED_RECTANGLE, Inches(3.45), Inches(4.55), Inches(6.25), Inches(0.55)
+    MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.4), Inches(4.95), Inches(9.0), Inches(0.6)
 )
 bar.fill.solid()
 bar.fill.fore_color.rgb = DEEP
 bar.line.fill.background()
 tf = bar.text_frame
-tf.text = "C 端永久免费｜不做 ToC 广告｜效果费与创造的价值线性挂钩"
+tf.text = "C 端永久免费｜App 负责收入，天禧融合负责产品｜共享同一套「捕获 → 结构化 → 日历」能力"
 for p_ in tf.paragraphs:
     p_.alignment = PP_ALIGN.CENTER
     for r in p_.runs:
         r.font.name = FONT
-        r.font.size = Pt(8.8)
+        r.font.size = Pt(9)
         r.font.bold = True
         r.font.color.rgb = WHITE
 
