@@ -84,6 +84,38 @@ def arrow(slide, x, y, w=0.25, h=0.2, color=GREEN):
     shape.line.fill.background()
 
 
+
+def add_table(slide, x, y, w, rows, cols, widths, data, *, size=8, header_fill=GREEN):
+    shape = slide.shapes.add_table(
+        rows, cols, Inches(x), Inches(y), Inches(w), Inches(0.5 * rows)
+    )
+    tbl = shape.table
+    for i, width in enumerate(widths):
+        tbl.columns[i].width = Inches(width)
+    tbl.rows[0].height = Inches(0.42)
+    for r in range(1, rows):
+        tbl.rows[r].height = Inches(0.56)
+    for r in range(rows):
+        for c in range(cols):
+            cell = tbl.cell(r, c)
+            cell.margin_left = Inches(0.06)
+            cell.margin_right = Inches(0.06)
+            cell.margin_top = Inches(0.02)
+            cell.margin_bottom = Inches(0.02)
+            cell.text = str(data[r][c])
+            for para in cell.text_frame.paragraphs:
+                for run in para.runs:
+                    run.font.name = FONT
+                    run.font.size = Pt(size)
+                    run.font.color.rgb = WHITE if r == 0 else INK
+                    run.font.bold = r == 0
+            cell.fill.solid()
+            if r == 0:
+                cell.fill.fore_color.rgb = header_fill
+            else:
+                cell.fill.fore_color.rgb = WHITE if r % 2 else RGBColor(0xF2, 0xF7, 0xF3)
+    return tbl
+
 prs = Presentation(str(TEMPLATE))
 
 # ---------- S1 封面 ----------
@@ -472,6 +504,50 @@ xml_slides = prs.slides._sldIdLst
 sld_ids = list(xml_slides)
 xml_slides.remove(sld_ids[-1])
 xml_slides.insert(9, sld_ids[-1])
+
+
+# ---------- 新增：联想命题关联页（放在一句话小结之后）----------
+layout = next(l for l in prs.slide_layouts if l.name == "3_Title and two columns")
+s = prs.slides.add_slide(layout)
+for sh in list(s.shapes):
+    if sh.is_placeholder:
+        sh._element.getparent().remove(sh._element)
+add_text(s, 0.25, 0.82, 8.8, 0.4, ["联想命题一 · AI 办公任务助手"], size=19, bold=True, color=DEEP)
+add_text(s, 0.25, 1.18, 8.8, 0.25, ["选定一个职业角色 + 一项办公任务；本地化部署，数据不出端。"], size=8.5, color=GRAY)
+
+card(s, 0.35, 1.52, 3.35, 1.02, PALE)
+add_text(s, 0.5, 1.62, 3.0, 0.22, ["选定角色"], size=8.5, bold=True, color=GREEN)
+add_text(s, 0.5, 1.87, 3.1, 0.55, ["售后服务工程师 / 客户成功专员"], size=11, bold=True, color=DEEP)
+
+card(s, 0.35, 2.72, 3.35, 1.35, PALE)
+add_text(s, 0.5, 2.82, 3.0, 0.22, ["选定任务"], size=8.5, bold=True, color=GREEN)
+add_text(s, 0.5, 3.07, 3.1, 0.9, ["从客服会话、邮件、会议纪要、截图中提取时间承诺与待办，自动生成跟进日程与提醒。"], size=8.2, color=INK)
+
+card(s, 0.35, 4.25, 3.35, 0.9, DEEP)
+add_text(s, 0.5, 4.35, 3.1, 0.25, ["交付：软件 MVP 已跑通"], size=9, bold=True, color=WHITE)
+add_text(s, 0.5, 4.62, 3.1, 0.25, ["119 条测试 + Android 真机闭环"], size=7, color=RGBColor(0xD8, 0xE8, 0xDF))
+
+data = [
+    ["命题要求", "理时针的实现"],
+    ["全本地化 / 端侧", "FastAPI + SQLite + RapidOCR + 本地 CalDAV，无云端 LLM"],
+    ["无网持续工作", "解析、OCR、日历写入均在本机完成，可断网演示"],
+    ["会议 → 需求 → 自动跟进", "纪要与会话抽取待办 + 截止时间 → 日历提醒"],
+    ["本地检索 / 引用可溯源", "每条日程保留来源：会话、文章 URL、图片路径"],
+    ["跨文档 / 跨应用重复劳动", "微信、飞书、小红书、邮件、截图统一入口"],
+]
+add_table(s, 3.95, 1.52, 5.75, 6, 2, [1.95, 3.8], data, size=8)
+add_text(s, 3.95, 5.0, 5.8, 0.25, ["一句话：把「时间承诺」从聊天里抽出来，变成可追踪的日程。"], size=8, bold=True, color=GREEN)
+s.notes_slide.notes_text_frame.text = (
+    "60 秒：联想命题一要求选定角色 + 一项办公任务，做本地化 AI 助手。"
+    "我们选售后服务工程师/客户成功，任务是把会话、邮件、纪要、截图里的时间承诺，"
+    "变成可追踪的日程与提醒。全本地部署，无云端 LLM；每条日程保留来源，可溯源；"
+    "同一套能力跨微信、飞书、小红书、邮件。软件 MVP 已跑通并完成真机验证。"
+)
+
+xml_slides = prs.slides._sldIdLst
+ids = list(xml_slides)
+xml_slides.remove(ids[-1])
+xml_slides.insert(2, ids[-1])
 
 OUT.parent.mkdir(parents=True, exist_ok=True)
 prs.save(OUT)
