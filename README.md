@@ -9,7 +9,7 @@
 ## 落地页
 
 - 本地预览：`python -m http.server 4173 --directory docs` → <http://127.0.0.1:4173/>
-- 线上（GitHub Pages）：`https://<用户名>.github.io/lishizhen/`（推送后替换用户名）
+- 线上（GitHub Pages）：`https://murasame9877.github.io/lishizhen/`（推送后替换用户名）
 
 ## 快速开始
 
