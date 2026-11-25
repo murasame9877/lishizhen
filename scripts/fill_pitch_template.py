@@ -170,30 +170,35 @@ for cx, letter in [(0.56, "A"), (2.49, "B"), (4.38, "C")]:
             r.font.bold = True
             r.font.color.rgb = GREEN
 
-# ---------- S4 问题与创新 ----------
+# ---------- S4 痛点（个体 / 联想用户 / 一人公司）----------
 s = prs.slides[3]
 set_text(find(s, "文本框 1"), ["痛点：错过的成本"], size=20, bold=True, color=DEEP)
 for sh in list(s.shapes):
-    if sh.left is not None and sh.left >= Inches(5.7):
+    if sh.name != "文本框 1":
         sh._element.getparent().remove(sh._element)
-poster = ROOT / "data" / "images" / "20261125-094341-98d5ca00.jpg"
-if poster.exists():
-    s.shapes.add_picture(str(poster), Inches(6.55), Inches(1.5), height=Inches(3.5))
-    add_text(s, 6.35, 5.1, 3.2, 0.3, ["真实输入：公众号活动海报"], size=9, color=GRAY)
-set_text(
-    find(s, "文本框 2"),
-    [
-        "信息散落在公众号、群聊、海报、邮件里，人靠脑子记、靠手抄日历，必然漏。",
-        "个人：高频学生每月错过 1–2 次；机会成本难计价，但可测提醒覆盖率。",
-        "企业：一次爽约 = 一次二次上门；行业锚点 100–130 元/单，二次售后率 6.7%。",
-        "月损失 = N × r × C；例：1000 单 × 10% × 120 元 ≈ 1.2 万元/月。",
-        "",
-        "创新：捕获 → 规则 + OCR 理解 → 写入系统日历，由系统负责到点提醒。",
-    ],
-    size=9.6,
-    color=INK,
-)
-add_text(s, 0.25, 4.72, 5.4, 0.3, ["来源：鲁班到家/中国家电网 2024；爽约率为假设，待试点校准"], size=7.5, color=GRAY)
+
+cols = [
+    ("个体用户", GREEN,
+     ["信息散落在公众号、群聊、海报、邮件里，非结构化。",
+      "「看到」≠「记住」，手动建又慢、易错、冲突不可见。",
+      "高频学生每周 2–5 场，平均每月错过 1–2 次（待验证）。"]),
+    ("联想个人用户", RGBColor(0xB8,0x86,0x00),
+     ["手机 / PC 里的截图、聊天、邮件、会议纪要散落。",
+      "系统日历不会从中文内容自动抽取。",
+      "缺一个「转发 / 截图即日程」的原生入口。"]),
+    ("OPC 一人公司", GRAY,
+     ["AI 时代超级个体，一人身兼产品、销售、客服、运营。",
+      "预约、会议、交付、跟进散落各处，一次遗漏 = 一次机会损失。",
+      "行业锚点：单次上门/履约 100–130 元，二次率 6.7%。"]),
+]
+for idx,(title,color,lines) in enumerate(cols):
+    x = 0.35 + idx*3.2
+    card(s, x, 1.45, 2.95, 3.1, PALE if idx!=2 else LIGHT)
+    add_text(s, x+0.18, 1.6, 2.6, 0.32, [title], size=11.5, bold=True, color=color)
+    add_text(s, x+0.18, 2.0, 2.62, 2.45, lines, size=8.8, color=INK)
+
+add_text(s, 0.35, 4.75, 9.3, 0.3, ["创新：捕获 → 规则 + OCR 理解 → 写入系统日历，由系统负责到点提醒。"], size=10.5, bold=True, color=DEEP)
+add_text(s, 0.35, 5.12, 9.3, 0.26, ["来源：鲁班到家/中国家电网 2024；爽约率与场次为假设，待试点校准。"], size=8, color=GRAY)
 
 # ---------- S5 目标客户（先讲获益，不催付费）----------
 s = prs.slides[4]
