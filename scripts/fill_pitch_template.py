@@ -28,7 +28,7 @@ PALE = RGBColor(0xE9, 0xF3, 0xEC)
 FONT = "微软雅黑"
 
 
-def set_text(shape, lines, *, size=12, color=INK, bold=False, spacing=1.1, align=PP_ALIGN.LEFT):
+def set_text(shape, lines, *, size=12, color=INK, bold=False, spacing=1.18, align=PP_ALIGN.LEFT):
     tf = shape.text_frame
     tf.clear()
     tf.word_wrap = True
@@ -124,13 +124,13 @@ add_text(s, 0.55, 4.55, 4.4, 0.4, ["理时针"], size=22, bold=True, color=DEEP)
 add_text(
     s, 0.55, 4.95, 4.6, 0.3,
     ["把任何 App 里的活动，一键变成会提醒的日程"],
-    size=9, bold=True, color=GREEN,
+    size=10, bold=True, color=GREEN,
 )
-add_text(s, 0.55, 5.28, 4.6, 0.25, ["团队：成员 A / B / C    2026.11"], size=8, color=GRAY)
+add_text(s, 0.55, 5.28, 4.6, 0.25, ["团队：成员 A / B / C    2026.11"], size=9, color=GRAY)
 
 # ---------- S2 一句话小结（只留一句）----------
 s = prs.slides[1]
-set_text(find(s, "文本框 2"), ["一句话项目小结"], size=18, bold=True, color=DEEP)
+set_text(find(s, "文本框 2"), ["一句话项目小结"], size=20, bold=True, color=DEEP)
 one = find(s, "Text Placeholder 1")
 one.top = Inches(2.4)
 one.height = Inches(1.0)
@@ -138,14 +138,15 @@ set_text(one, ["把信息入口和提醒系统连起来。"], size=26, bold=True
 
 # ---------- S3 团队（占位，用户自行替换）----------
 s = prs.slides[2]
-set_text(find(s, "文本框 5"), ["核心团队  Team"], size=18, bold=True, color=DEEP)
+set_text(find(s, "文本框 5"), ["核心团队  Team"], size=20, bold=True, color=DEEP)
 team = [
     ("文本框 12", "成员 A", "产品 / 项目"),
     ("文本框 13", "成员 B", "后端 / 算法"),
     ("文本框 14", "成员 C", "前端 / 测试"),
 ]
 for name, who, role in team:
-    set_text(find(s, name), [who, role], size=10, color=INK)
+    set_text(find(s, name), [who, role], size=11, color=INK)
+add_text(s, 0.55, 4.35, 8.8, 0.4, ["从需求、解析、OCR 到真机日历同步，全部自己实现。"], size=10.5, color=GRAY)
 for sh in list(s.shapes):
     if sh.name in {"文本框 15", "文本框 16"}:
         sh._element.getparent().remove(sh._element)
@@ -170,7 +171,7 @@ for cx, letter in [(0.56, "A"), (2.49, "B"), (4.38, "C")]:
 
 # ---------- S4 问题与创新 ----------
 s = prs.slides[3]
-set_text(find(s, "文本框 1"), ["问题与创新  Problem & Innovation"], size=18, bold=True, color=DEEP)
+set_text(find(s, "文本框 1"), ["问题与创新  Problem & Innovation"], size=20, bold=True, color=DEEP)
 for sh in list(s.shapes):
     if sh.left is not None and sh.left >= Inches(5.7):
         sh._element.getparent().remove(sh._element)
@@ -207,7 +208,7 @@ set_text(
         "",
         "活动方与广告主：为精准触达付费。",
     ],
-    size=10.5,
+    size=11,
     color=INK,
 )
 add_text(s, 5.95, 1.65, 3.3, 0.35, ["企业为什么愿意投入？"], size=13, bold=True, color=GREEN)
@@ -221,9 +222,10 @@ add_text(
         "",
         "先证明 ROI，再谈合作。",
     ],
-    size=9.5,
+    size=10.2,
     color=INK,
 )
+add_text(s, 0.45, 5.05, 9.2, 0.3, ["C 端免费 · 企业为结果付费 · 活动方/广告主为触达付费"], size=9.5, bold=True, color=GREEN)
 
 # ---------- S6 市场规模（数字 + 增长曲线）----------
 s = prs.slides[5]
@@ -270,7 +272,7 @@ chart.value_axis.tick_labels.font.color.rgb = GRAY
 chart.category_axis.tick_labels.font.color.rgb = GRAY
 chart.chart_title.text_frame.paragraphs[0].font.size = Pt(11)
 add_text(s, 0.45, 4.75, 4.5, 0.3, ["路径：校园 → 企业服务 → 泛人群"], size=9, color=GREEN, bold=True)
-add_text(s, 5.35, 4.85, 4.3, 0.3, ["数据：教育部 2023；规模为假设，待试点校准"], size=8, color=GRAY)
+add_text(s, 5.35, 4.85, 4.3, 0.3, ["数据：教育部 2023；规模为假设，待试点校准"], size=8.5, color=GRAY)
 
 # ---------- S7 价值主张（三列卡片）----------
 s = prs.slides[6]
@@ -288,7 +290,7 @@ for idx, (who, tag, desc) in enumerate(values):
     add_text(s, x + 0.22, 2.28, 2.6, 0.5, [tag], size=24, bold=True, color=GREEN if idx < 2 else RGBColor(0xB8, 0x86, 0x00))
     add_text(s, x + 0.22, 3.0, 2.65, 1.2, desc.split("\n"), size=9.5, color=INK)
 
-add_text(s, 0.4, 4.55, 9.3, 0.35, ["价值公式：正确的时间 + 正确的地点 + 一次不会错过的提醒"], size=10, bold=True, color=GREEN)
+add_text(s, 0.4, 4.55, 9.3, 0.35, ["价值公式：正确的时间 + 正确的地点 + 一次不会错过的提醒"], size=10.5, bold=True, color=GREEN)
 
 # ---------- S8 资源与伙伴 ----------
 s = prs.slides[7]
@@ -301,13 +303,13 @@ set_text(
         "校园与社团：首批验证场景与种子用户。",
         "开源组件：Radicale、DAVx5、RapidOCR、FastAPI。",
     ],
-    size=10.5,
+    size=11,
     color=INK,
 )
 
 # ---------- S9 技术与 MVP ----------
 s = prs.slides[8]
-set_text(find(s, "文本框 1"), ["技术实现与 MVP"], size=18, bold=True, color=DEEP)
+set_text(find(s, "文本框 1"), ["技术实现与 MVP"], size=20, bold=True, color=DEEP)
 set_text(
     find(s, "Text Placeholder 1"),
     [
@@ -317,7 +319,7 @@ set_text(
         "已跑通：文字/文章/海报；119 条测试；OCR 3–10 秒；",
         "真机写入系统日历，2 分钟内事件准时弹窗。",
     ],
-    size=9.5,
+    size=10.5,
     color=INK,
 )
 montage = SHOTS / "montage.png"
@@ -342,7 +344,7 @@ for idx, (name, caption) in enumerate(shots):
         continue
     x = 0.75 + idx * 2.85
     photo.shapes.add_picture(str(path), Inches(x), Inches(1.35), height=Inches(3.9))
-    add_text(photo, x, 5.35, 2.7, 0.3, [caption], size=9, color=GRAY)
+    add_text(photo, x, 5.35, 2.7, 0.3, [caption], size=10, color=GRAY)
 add_text(photo, 0.25, 1.05, 4.0, 0.2, [""], size=7.5, color=GRAY)
 # ---------- S10 商业模式（价值交换，不催联想买单）----------
 s = prs.slides[9]
@@ -357,7 +359,7 @@ set_text(
         "终端合作：交付系统级入口",
         "消费 App：交付精准触达",
     ],
-    size=10,
+    size=10.5,
     color=INK,
 )
 for sh in list(s.shapes):
@@ -409,7 +411,7 @@ for p in tf.paragraphs:
 
 # ---------- S11 验证计划（光路图）----------
 s = prs.slides[10]
-set_text(find(s, "文本框 1"), ["验证：已经走到哪一步"], size=18, bold=True, color=DEEP)
+set_text(find(s, "文本框 1"), ["验证：已经走到哪一步"], size=20, bold=True, color=DEEP)
 remove(s, {"Text Placeholder 1", "Text Placeholder 2"})
 band = s.shapes.add_shape(
     MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.35), Inches(2.02), Inches(8.9), Inches(0.16)
@@ -457,25 +459,25 @@ for idx, (title, desc, color) in enumerate(milestones):
     card(s, x, 3.15, 2.85, 1.55, PALE if idx == 0 else RGBColor(0xF7, 0xF9, 0xF8))
     add_text(s, x + 0.18, 3.28, 2.5, 0.3, [title], size=11, bold=True, color=color)
     add_text(s, x + 0.18, 3.65, 2.55, 0.95, desc.split("\n"), size=8.5, color=INK)
-add_text(s, 0.45, 4.95, 9.2, 0.3, ["下一步验证：付费意愿、爽约率下降、广告 eCPM"], size=8.5, color=GRAY)
+add_text(s, 0.45, 4.95, 9.2, 0.3, ["下一步验证：付费意愿、爽约率下降、广告 eCPM"], size=9, color=GRAY)
 
 # ---------- S12 SDG 指标 ----------
 s = prs.slides[11]
 set_text(find(s, "文本框 1"), ["SDG 成功指标"], size=20, bold=True, color=DEEP)
-set_text(
-    find(s, "文本占位符 2"),
-    [
-        "量化：",
-        "· 每用户每月减少 1–2 次错过活动/预约",
-        "· 日程写入成功率 ≥ 95%，提醒到达率 ≥ 90%",
-        "· 试点企业爽约率下降 ≥ 5%",
-        "· 首年覆盖 2 万+ 用户、300+ 企业坐席",
-        "",
-        "定性：让信息更可达，让服务更高效（SDG 4 / SDG 9）。",
-    ],
-    size=10.5,
-    color=INK,
-)
+remove(s, {"文本占位符 2"})
+sdg_items = [
+    ("减少错过", "每用户每月减少 1–2 次错过活动/预约"),
+    ("写入与触达", "日程写入成功率 ≥ 95%，提醒到达率 ≥ 90%"),
+    ("企业效率", "试点企业爽约率下降 ≥ 5%"),
+    ("覆盖规模", "首年 2 万+ 用户、300+ 企业坐席"),
+]
+for idx, (title, desc) in enumerate(sdg_items):
+    x = 0.45 + (idx % 2) * 4.5
+    y = 1.55 + (idx // 2) * 1.65
+    card(s, x, y, 4.25, 1.45, RGBColor(0xF7, 0xF9, 0xF8))
+    add_text(s, x + 0.2, y + 0.14, 3.8, 0.3, [title], size=12, bold=True, color=GREEN)
+    add_text(s, x + 0.2, y + 0.55, 3.85, 0.7, [desc], size=10, color=INK)
+add_text(s, 0.45, 5.05, 9.0, 0.3, ["定性：让信息更可达，让服务更高效（SDG 4 / SDG 9）。"], size=10, color=GRAY)
 
 # ---------- S13 风险（2×2 卡片）----------
 s = prs.slides[12]
@@ -490,9 +492,9 @@ risks = [
 for title, risk, action, x, y in risks:
     card(s, x, y, 4.3, 1.55, RGBColor(0xF7, 0xF9, 0xF8))
     add_text(s, x + 0.2, y + 0.12, 3.9, 0.3, [title], size=11, bold=True, color=DEEP)
-    add_text(s, x + 0.2, y + 0.48, 3.9, 0.3, ["风险：" + risk], size=8.5, color=RED)
-    add_text(s, x + 0.2, y + 0.85, 3.9, 0.5, ["应对：" + action], size=8.5, color=GREEN)
-add_text(s, 0.45, 5.1, 9.0, 0.3, ["原则：入口可以变，能力不变；先用可验证的场景活下来。"], size=9, color=GRAY)
+    add_text(s, x + 0.2, y + 0.48, 3.9, 0.3, ["风险：" + risk], size=9.3, color=RED)
+    add_text(s, x + 0.2, y + 0.85, 3.9, 0.5, ["应对：" + action], size=9.3, color=GREEN)
+add_text(s, 0.45, 5.1, 9.0, 0.3, ["原则：入口可以变，能力不变；先用可验证的场景活下来。"], size=9.5, color=GRAY)
 
 # ---------- S14 结语 ----------
 s = prs.slides[13]
@@ -512,31 +514,31 @@ s = prs.slides.add_slide(layout)
 for sh in list(s.shapes):
     if sh.is_placeholder:
         sh._element.getparent().remove(sh._element)
-add_text(s, 0.25, 0.82, 8.8, 0.4, ["联想命题一 · AI 办公任务助手"], size=19, bold=True, color=DEEP)
-add_text(s, 0.25, 1.18, 8.8, 0.25, ["选定一个职业角色 + 一项办公任务；本地化部署，数据不出端。"], size=8.5, color=GRAY)
+add_text(s, 0.25, 0.82, 8.8, 0.4, ["联想命题一 · AI 办公任务助手"], size=20, bold=True, color=DEEP)
+add_text(s, 0.25, 1.18, 8.8, 0.25, ["选定一个职业角色 + 一项办公任务；本地化部署，数据不出端。"], size=9.2, color=GRAY)
 
 card(s, 0.35, 1.52, 3.35, 1.02, PALE)
-add_text(s, 0.5, 1.62, 3.0, 0.22, ["选定角色"], size=8.5, bold=True, color=GREEN)
-add_text(s, 0.5, 1.87, 3.1, 0.55, ["售后服务工程师 / 客户成功专员"], size=11, bold=True, color=DEEP)
+add_text(s, 0.5, 1.62, 3.0, 0.22, ["选定角色"], size=9, bold=True, color=GREEN)
+add_text(s, 0.5, 1.87, 3.1, 0.55, ["售后服务工程师 / 客户成功专员"], size=12, bold=True, color=DEEP)
 
 card(s, 0.35, 2.72, 3.35, 1.35, PALE)
-add_text(s, 0.5, 2.82, 3.0, 0.22, ["选定任务"], size=8.5, bold=True, color=GREEN)
-add_text(s, 0.5, 3.07, 3.1, 0.9, ["从客服会话、邮件、会议纪要、截图中提取时间承诺与待办，自动生成跟进日程与提醒。"], size=8.2, color=INK)
+add_text(s, 0.5, 2.82, 3.0, 0.22, ["选定任务"], size=9, bold=True, color=GREEN)
+add_text(s, 0.5, 3.07, 3.1, 0.9, ["从会话、邮件、纪要、截图中提取时间承诺，自动生成跟进日程与提醒。"], size=9.4, color=INK)
 
 card(s, 0.35, 4.25, 3.35, 0.9, DEEP)
-add_text(s, 0.5, 4.35, 3.1, 0.25, ["交付：软件 MVP 已跑通"], size=9, bold=True, color=WHITE)
-add_text(s, 0.5, 4.62, 3.1, 0.25, ["119 条测试 + Android 真机闭环"], size=7, color=RGBColor(0xD8, 0xE8, 0xDF))
+add_text(s, 0.5, 4.35, 3.1, 0.25, ["交付：软件 MVP 已跑通"], size=10, bold=True, color=WHITE)
+add_text(s, 0.5, 4.62, 3.1, 0.25, ["119 条测试 + Android 真机闭环"], size=8, color=RGBColor(0xD8, 0xE8, 0xDF))
 
 data = [
     ["命题要求", "理时针的实现"],
-    ["全本地化 / 端侧", "FastAPI + SQLite + RapidOCR + 本地 CalDAV，无云端 LLM"],
-    ["无网持续工作", "解析、OCR、日历写入均在本机完成，可断网演示"],
-    ["会议 → 需求 → 自动跟进", "纪要与会话抽取待办 + 截止时间 → 日历提醒"],
-    ["本地检索 / 引用可溯源", "每条日程保留来源：会话、文章 URL、图片路径"],
-    ["跨文档 / 跨应用重复劳动", "微信、飞书、小红书、邮件、截图统一入口"],
+    ["全本地化 / 端侧", "本地 FastAPI/SQLite/RapidOCR/CalDAV，无云端 LLM"],
+    ["无网持续工作", "解析/OCR/日历写入全本地，可断网"],
+    ["会议 → 需求 → 自动跟进", "纪要/会话抽取待办 + 截止 → 日历提醒"],
+    ["本地检索 / 引用可溯源", "每条日程保留来源（会话/URL/图片）"],
+    ["跨文档 / 跨应用", "微信/飞书/小红书/邮件/截图统一入口"],
 ]
-add_table(s, 3.95, 1.52, 5.75, 6, 2, [1.95, 3.8], data, size=8)
-add_text(s, 3.95, 5.0, 5.8, 0.25, ["一句话：把「时间承诺」从聊天里抽出来，变成可追踪的日程。"], size=8, bold=True, color=GREEN)
+add_table(s, 3.95, 1.52, 5.75, 6, 2, [2.0, 3.75], data, size=9.2)
+add_text(s, 3.95, 5.0, 5.8, 0.25, ["一句话：把「时间承诺」从聊天里抽出来，变成可追踪的日程。"], size=9, bold=True, color=GREEN)
 s.notes_slide.notes_text_frame.text = (
     "60 秒：联想命题一要求选定角色 + 一项办公任务，做本地化 AI 助手。"
     "我们选售后服务工程师/客户成功，任务是把会话、邮件、纪要、截图里的时间承诺，"
@@ -548,6 +550,37 @@ xml_slides = prs.slides._sldIdLst
 ids = list(xml_slides)
 xml_slides.remove(ids[-1])
 xml_slides.insert(2, ids[-1])
+
+# ---------- 新增：竞品对比页（放在问题与创新之后）----------
+layout = next(l for l in prs.slide_layouts if l.name == "3_Title and two columns")
+s = prs.slides.add_slide(layout)
+for sh in list(s.shapes):
+    if sh.is_placeholder:
+        sh._element.getparent().remove(sh._element)
+add_text(s, 0.25, 0.8, 9.4, 0.4, ["竞品对比：原生日历 / 飞书 / Teams 之外"], size=20, bold=True, color=DEEP)
+
+data = [
+    ["方案", "一键添加", "依赖的生态", "痛点 / 差异"],
+    ["原生日历（手机/电脑）", "否，只能手动", "无", "信息与日程两张皮"],
+    ["飞书日历", "仅飞书内消息", "飞书", "离开飞书就要手动"],
+    ["Teams / Outlook", "仅 Microsoft 365", "微软", "离开微软就要手动"],
+    ["理时针（现在）", "微信转发/截图", "微信入口", "已解决微信来源"],
+    ["理时针（未来）", "任意 App 截图/识屏", "无（系统级）", "跨文档/软件/生态"],
+]
+add_table(s, 0.35, 1.35, 9.3, 6, 4, [2.2, 2.3, 1.9, 2.9], data, size=9.2)
+add_text(s, 0.35, 4.85, 9.3, 0.25, ["对联想：把「日程」变成系统 AI 的高频办事入口"], size=10, bold=True, color=DEEP)
+add_text(s, 0.35, 5.13, 9.3, 0.25, ["天禧等系统 AI 从问答到办事 · 跨文档/软件/生态 · 售后预约/SLA 可量化"], size=9, color=GRAY)
+s.notes_slide.notes_text_frame.text = (
+    "45 秒：原生日历只能手动；飞书和 Teams 的一键添加只在自己的生态里，"
+    "你不在那个办公套件里，信息还是要手动搬。我们现在先把微信这个最大信息源接进来，"
+    "转发/截图即可；未来内置到联想天禧这类系统 AI，就能跨文档、跨软件、跨生态。"
+    "对联想的价值：AI 助手从问答走向办事，增加高频使用场景；企业服务侧的预约与 SLA 也能直接量化。"
+)
+
+xml_slides = prs.slides._sldIdLst
+ids = list(xml_slides)
+xml_slides.remove(ids[-1])
+xml_slides.insert(5, ids[-1])
 
 OUT.parent.mkdir(parents=True, exist_ok=True)
 prs.save(OUT)
